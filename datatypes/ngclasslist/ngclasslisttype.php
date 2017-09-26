@@ -179,19 +179,24 @@ class NgClassListType extends eZDataType
             "class_ids" => array()
         );
 
-        if ( !empty( $dataText ) )
+        if ( empty( $dataText ) )
+        {
+            $classAttributeContent = $contentObjectAttribute->contentClassAttribute()->attribute('content');
+            $classIdentifiers = (array)$classAttributeContent['selected_class_identifiers'];
+        }
+        else
         {
             $classIdentifiers = explode( ",", $dataText );
+        }
 
-            foreach ( $classIdentifiers as $classIdentifier )
+        foreach ( $classIdentifiers as $classIdentifier )
+        {
+            $class = eZContentClass::fetchByIdentifier( $classIdentifier );
+            if ( $class instanceof eZContentClass )
             {
-                $class = eZContentClass::fetchByIdentifier( $classIdentifier );
-                if ( $class instanceof eZContentClass )
-                {
-                    $content["classes"][] = $class;
-                    $content["class_identifiers"][] = $classIdentifier;
-                    $content["class_ids"][] = (int) $class->attribute( "id" );
-                }
+                $content["classes"][] = $class;
+                $content["class_identifiers"][] = $classIdentifier;
+                $content["class_ids"][] = (int) $class->attribute( "id" );
             }
         }
 
