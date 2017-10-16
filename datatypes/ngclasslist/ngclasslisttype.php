@@ -181,7 +181,7 @@ class NgClassListType extends eZDataType
 
         if ( !empty( $dataText ) )
         {
-            $classIdentifiers = explode( ",", $dataText );
+            $classIdentifiers = array_unique(explode( ",", $dataText ));
 
             foreach ( $classIdentifiers as $classIdentifier )
             {
