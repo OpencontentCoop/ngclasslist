@@ -208,23 +208,23 @@ class NgClassListType extends eZDataType
         $defaultValueName = $base . self::DEFAULT_VALUE_VARIABLE . $classAttribute->attribute( 'id' );
         $allowedGroupsName = $base . self::ALLOWED_GROUP_VARIABLE . $classAttribute->attribute( 'id' );
 
-        $data = array(
-            'default_class_identifiers' => false,
-            'allowed_groups' => false
-        );
-        if ( $http->hasPostVariable( $defaultValueName ) )
-        {
-            $defaultValue = $http->postVariable( $defaultValueName );
-            $data['default_class_identifiers'] = array_unique($defaultValue);
-        }
-        if ( $http->hasPostVariable( $allowedGroupsName ) )
-        {
-            $allowedGroups = $http->postVariable( $allowedGroupsName );
-            $data['allowed_groups'] = $allowedGroups;
-        }
+        if ($http->hasPostVariable($defaultValueName) || $http->hasPostVariable($allowedGroupsName)) {
+            $data = array(
+                'default_class_identifiers' => false,
+                'allowed_groups' => false
+            );
+            if ($http->hasPostVariable($defaultValueName)) {
+                $defaultValue = $http->postVariable($defaultValueName);
+                $data['default_class_identifiers'] = array_unique($defaultValue);
+            }
+            if ($http->hasPostVariable($allowedGroupsName)) {
+                $allowedGroups = $http->postVariable($allowedGroupsName);
+                $data['allowed_groups'] = $allowedGroups;
+            }
 
-        $classAttribute->setAttribute(self::CLASS_ATTRIBUTE_LIST_FIELD, json_encode($data));
-        $classAttribute->store();
+            $classAttribute->setAttribute(self::CLASS_ATTRIBUTE_LIST_FIELD, json_encode($data));
+            $classAttribute->store();
+        }
     }
 
     /**
